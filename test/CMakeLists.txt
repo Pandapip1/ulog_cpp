@@ -7,16 +7,18 @@ set(SYSTEM_ARG SYSTEM)
 if (CMAKE_VERSION VERSION_LESS "3.25")
 	set(SYSTEM_ARG "")
 endif ()
-FetchContent_Declare(
-		DocTest
-		GIT_REPOSITORY "https://github.com/doctest/doctest.git"
-		GIT_TAG "v2.4.11"
-		${SYSTEM_ARG}
-)
 
+find_package(doctest CONFIG)
 
-FetchContent_MakeAvailable(DocTest)
-
+if(NOT doctest_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(
+        doctest
+        GIT_REPOSITORY "https://github.com/doctest/doctest.git"
+        GIT_TAG "v2.4.11"
+    )
+    FetchContent_MakeAvailable(doctest)
+endif()
 
 add_executable(tests
     main.cpp
